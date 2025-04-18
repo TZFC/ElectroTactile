@@ -20,8 +20,17 @@ int pinToGridIndex(int pin) {
     case TRAN_PIN_TOP_RIGHT: return 1;  
     case TRAN_PIN_BOT_LEFT: return 2;  
     case TRAN_PIN_BOT_RIGHT: return 3;  
-    default: return -1;
+    default: return -1; 
   }
+}
+
+void printElectrodeLabels(const char* labels[], int count) {
+  Serial.print("Stimulating: ");
+  for (int i = 0; i < count; i++) {
+    Serial.print(labels[i]);
+    if (i < count - 1) Serial.print(", ");
+  }
+  Serial.println();
 }
 
 void printElectrodeGrid(const int pins[], int count) {
@@ -60,19 +69,35 @@ void stimulateCombo(const int pins[], const char* labels[], int count, int time_
 void loop() {
   digitalWrite(LED_PIN, HIGH);
 
-  const int combo1[] = {TRAN_PIN_TOP_LEFT, TRAN_PIN_TOP_RIGHT};
-  const char* labels1[] = {"Top Left", "Top Right"};
-  stimulateCombo(combo1, labels1, 2, 1000);
+  const int combo1[] = {TRAN_PIN_TOP_LEFT};
+  const char* labels1[] = {"Top Left"};
+  stimulateCombo(combo1, labels1, 1, 1000);
+  delay(1000);
 
-  delay(1000);  
-
-  const int combo2[] = {TRAN_PIN_BOT_LEFT, TRAN_PIN_BOT_RIGHT};
-  const char* labels2[] = {"Bottom Left", "Bottom Right"};
+  const int combo2[] = {TRAN_PIN_TOP_RIGHT, TRAN_PIN_BOT_RIGHT};
+  const char* labels2[] = {"Top Right", "Bottom Right"};
   stimulateCombo(combo2, labels2, 2, 1000);
+  delay(1000);
+
+  const int combo3[] = {TRAN_PIN_TOP_LEFT, TRAN_PIN_BOT_LEFT, TRAN_PIN_BOT_RIGHT};
+  const char* labels3[] = {"Top Left", "Bottom Left", "Bottom Right"};
+  stimulateCombo(combo3, labels3, 3, 1000);
+  delay(1000);
+
+  const int combo4[] = {
+    TRAN_PIN_TOP_LEFT, TRAN_PIN_TOP_RIGHT,
+    TRAN_PIN_BOT_LEFT, TRAN_PIN_BOT_RIGHT
+  };
+  const char* labels4[] = {
+    "Top Left", "Top Right", "Bottom Left", "Bottom Right"
+  };
+  stimulateCombo(combo4, labels4, 4, 1000);
+  delay(1000);
 
   digitalWrite(LED_PIN, LOW);
   delay(1000);
 }
+
 
 // void stimulate(int pin, int time_ms, const char* label) { // time in milliseconds
 
